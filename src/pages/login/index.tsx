@@ -1,9 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./Login.module.css"
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
+import { api } from "../../lib/api";
 
 export const Login: React.FC = () => {
+
+  const [email, setEmail] = useState("")
+  const [senha, setSenha] = useState("")
+
+  const handleLogin = async () => {
+
+    if(!email) {
+      return
+    }
+
+    if(!senha) {
+      return
+    }
+
+    api.post("/login", {
+      email,
+      senha
+    }).then(response => {
+
+      console.log(
+        {
+          data: response.data.barbearia
+        }
+      );
+      
+
+      const token = response.data.barbearia.token
+
+
+      console.log("> token", token);
+      
+
+      localStorage.setItem("#app-barber@1.0.0:token", token)
+    })
+
+    
+
+    // TODO: levar para o dashboard
+  }
+
+
   return (
     <div className={style.container}>
       <div className={style.content}>
@@ -24,10 +66,14 @@ export const Login: React.FC = () => {
               flexDirection: "column"
             }}>
 
-              <Input inputId="email" label="Email"/>
-              <Input inputId="password" label="Senha"/>
+              <Input inputId="email" label="Email" onChange={(e) => {
+                setEmail(e.target.value)
+              }}/>
+              <Input inputId="password" label="Senha" onChange={(e) => {
+                setSenha(e.target.value)
+              }}/>
             </div>
-            <Button title="Entrar"/>
+            <Button title="Entrar" onClick={handleLogin}/>
           </div>
 
           <div style={{

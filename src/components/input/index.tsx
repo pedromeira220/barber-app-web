@@ -1,12 +1,14 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import style from "./input.module.css"
 
-interface InputProps {
+interface InputProps extends ComponentProps<"input">{
   inputId: string
   label?: string
 }
 
-export const Input: React.FC<InputProps> = ({label, inputId}) => {
+export const Input: React.FC<InputProps> = ({label, inputId, ...rest}) => {
+
+
   return (
     <div style={{
       display: "flex",
@@ -21,7 +23,7 @@ export const Input: React.FC<InputProps> = ({label, inputId}) => {
       }
 
     <div className={style.container}>
-      <input type="text" className={style.control} id={inputId}/>
+      <input type="text" className={style.control} id={inputId} {...rest}/>
     </div>
     </div>
   )
