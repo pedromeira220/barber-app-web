@@ -1,5 +1,4 @@
-import { CadastrarBarbearia } from './pages/cadastrar-barbearia'
-import { Login } from './pages/login'
+import RegisterBarbershop from './pages/cadastrar-barbearia'
 import "./styles/global.css"
 
 function App() {
@@ -7,7 +6,7 @@ function App() {
   return (
     <>
       {/* <Login /> */}
-      <CadastrarBarbearia />
+      <RegisterBarbershop />
     </>
   )
 }
