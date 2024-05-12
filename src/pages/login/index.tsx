@@ -1,93 +1,73 @@
-import React, { useState } from "react";
-import style from "./Login.module.css"
-import { Input } from "../../components/input";
-import { Button } from "../../components/button";
-import { api } from "../../lib/api";
+import { Button } from "@/components/ui/button"
+import { LoginBarbershopForm } from "./login-barbershop-form"
 
-export const Login: React.FC = () => {
-
-  const [email, setEmail] = useState("")
-  const [senha, setSenha] = useState("")
-
-  const handleLogin = async () => {
-
-    if(!email) {
-      return
-    }
-
-    if(!senha) {
-      return
-    }
-
-    api.post("/login", {
-      email,
-      senha
-    }).then(response => {
-
-      console.log(
-        {
-          data: response.data.barbearia
-        }
-      );
-      
-
-      const token = response.data.barbearia.token
-
-
-      console.log("> token", token);
-      
-
-      localStorage.setItem("#app-barber@1.0.0:token", token)
-    })
-
-    
-
-    // TODO: levar para o dashboard
-  }
-
-
+export default function Login() {
   return (
-    <div className={style.container}>
-      <div className={style.content}>
-          <div>
-            <h2 className={style.title}>Entre na sua conta</h2>
-            <p className={style.subtitle}>Coloque suas informações de login</p>
-          </div>
-          <div style={{
-            marginTop: 32,
-            display: "flex",
-            gap: 24,
-            flexDirection: "column"
-          }}>
-            <div style={{
-              marginTop: 32,
-              display: "flex",
-              gap: 20,
-              flexDirection: "column"
-            }}>
+    <>
+      <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+        <Button
+          className={"absolute right-4 top-4 md:right-8 md:top-8"}
+        >
+          Entrar
+        </Button>
+        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+          <div className="absolute inset-0 bg-zinc-900" />
 
-              <Input inputId="email" label="Email" onChange={(e) => {
-                setEmail(e.target.value)
-              }}/>
-              <Input inputId="password" label="Senha" onChange={(e) => {
-                setSenha(e.target.value)
-              }}/>
+          <div className="relative z-20 flex items-center text-lg font-medium">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mr-2 h-6 w-6"
+            >
+              <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+            </svg>
+            BarberApp
+          </div>
+          <div className="relative z-20 mt-auto">
+            <blockquote className="space-y-2">
+              <p className="text-lg">
+                &ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum enim doloribus suscipit iure vel voluptates rerum! Quidem a atque odit?&rdquo;
+              </p>
+              <footer className="text-sm">Barbearia do seu zé</footer>
+            </blockquote>
+          </div>
+        </div>
+        <div className="lg:p-8">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="flex flex-col space-y-2 text-center">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Crie uma conta para sua barbearia
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Insira as informações abaixo para criar a conta
+              </p>
             </div>
-            <Button title="Entrar" onClick={handleLogin}/>
+            <LoginBarbershopForm />
+            <p className="px-8 text-center text-sm text-muted-foreground">
+              Ao clicar em "cadastrar", você concorda com nossos{" "}
+              <a
+                href="/terms"
+                className="underline underline-offset-4 hover:text-primary"
+              >
+                Termos de serviço
+              </a>{" "}
+              e{" "}
+              <a
+                href="/privacy"
+                className="underline underline-offset-4 hover:text-primary"
+              >
+                Política de privacidade
+              </a>
+              .
+            </p>
           </div>
-
-          <div style={{
-            marginTop: 32
-          }}>
-            <p style={{
-              textAlign: "center"
-            }}>Não tem conta? <span style={{
-              fontWeight: 600,
-              color: "#DC6803",
-              cursor: "pointer"
-            }}>Crie uma agora</span></p>
-          </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

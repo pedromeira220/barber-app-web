@@ -8,33 +8,27 @@ import { Loader2 } from "lucide-react"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { registerBarbershop } from "@/api/register-barbershop"
+import { loginBarbershop } from "@/api/login-barbershop"
 
 interface BarbershopRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const registerBarbershopFormSchema = z.object({
-  name: z.string(),
+const loginBarbershopFormSchema = z.object({
   email: z.string().email(),
   password: z.string(),
-  contactName: z.string(),
-  contactPhone: z.string()
 })
 
-type registerBarbershopFormSchemaInputs = z.infer<typeof registerBarbershopFormSchema>
+type loginBarbershopFormSchemaInputs = z.infer<typeof loginBarbershopFormSchema>
 
-export function BarbershopRegisterForm({ className, ...props }: BarbershopRegisterFormProps) {
+export function LoginBarbershopForm({ className, ...props }: BarbershopRegisterFormProps) {
 
-  const {register, handleSubmit, formState: {isLoading}} = useForm<registerBarbershopFormSchemaInputs>({
-    resolver: zodResolver(registerBarbershopFormSchema),
+  const {register, handleSubmit, formState: {isLoading}} = useForm<loginBarbershopFormSchemaInputs>({
+    resolver: zodResolver(loginBarbershopFormSchema),
   })
 
-  const handleRegisterBarbershop = async (data: registerBarbershopFormSchemaInputs) => {
+  const handleRegisterBarbershop = async (data: loginBarbershopFormSchemaInputs) => {
     
-    registerBarbershop({
-      contactName: data.contactName,
-      contactPhone: data.contactPhone,
+    loginBarbershop({
       email: data.email,
-      name: data.contactPhone,
       password: data.password
     }).then(() => {
       
@@ -47,15 +41,7 @@ export function BarbershopRegisterForm({ className, ...props }: BarbershopRegist
       <form onSubmit={handleSubmit(handleRegisterBarbershop)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <Label htmlFor="name" className="mb-2 mt-4">
-              Nome da barbearia
-            </Label>
-            <Input
-              placeholder="Ex: barbearia do seu zé"
-              autoCapitalize="none"
-              disabled={isLoading}
-              {...register("name")}
-            />
+           
             <Label htmlFor="email" className="mb-2 mt-4">
               Email de acesso
             </Label>
@@ -80,32 +66,6 @@ export function BarbershopRegisterForm({ className, ...props }: BarbershopRegist
               disabled={isLoading}
               {...register("password")}
             />
-            
-            <div className="flex flex-row gap-4 mt-4">
-              <div>
-                <Label htmlFor="contactName" className="mb-2">
-                  Nome para contato
-                </Label>
-                <Input
-                  placeholder="Nome para contato"
-                  disabled={isLoading}
-                  {...register("contactName")}
-                />
-              </div>
-              
-
-              <div>
-                <Label htmlFor="contactPhone" className="mb-2 mt-4">
-                  Telefone para contato
-                </Label>
-                <Input
-                  placeholder="Telefone para contato"
-                  disabled={isLoading}
-                  {...register("contactPhone")}
-                />
-              </div>
-              
-            </div>
             
           </div>
           <Button disabled={isLoading} className="mt-3">
