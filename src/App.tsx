@@ -1,14 +1,12 @@
-import RegisterBarbershop from './pages/cadastrar-barbearia'
+import { Agenda } from './pages/agenda'
 import "./styles/global.css"
 
-function App() {
+export function App() {
 
   return (
     <>
       {/* <Login /> */}
-      <RegisterBarbershop />
+      <Agenda />
     </>
   )
 }
-
-export default App
