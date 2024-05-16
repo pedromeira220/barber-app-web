@@ -7,7 +7,7 @@ import styles from "./style.css"
 // <div className={style.container}></div>
 // Coloque entre chaves e acesse o nome da propriedade definida no arquivo css
 
-export function Agenda() {
+export function Profissionais() {
   return (
     <div className="grid min-h-screen grid-cols-5">
       <Sidebar />
@@ -16,22 +16,21 @@ export function Agenda() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">
-              Agenda da barbearia do seu zé
+              Visão dos profissionais cadastrados
             </h2>
             <p className="text-muted-foreground">
-              Consulte os agendamentos do dia
+              Veja aqui todos os profissionais
             </p>
           </div>
 
           <div className="flex flex-row gap-2">
-            <Button variant="outline">Bloquear horário</Button>
-            <Button>Cadastrar agendamento</Button>
+            <Button>Cadastrar profissional</Button>
           </div>
             
         </div>
 
         <div className="rounded-md border">
-          <p>agenda</p>
+          <p>tabela com os dados dos profissionais</p>
         </div>
       </div>
     </div>
