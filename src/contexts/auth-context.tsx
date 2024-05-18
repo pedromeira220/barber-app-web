@@ -1,9 +1,10 @@
+import { getAuthenticatedBarbershop } from "@/api/get-authenticated-barbershop";
 import { loginBarbershop } from "@/api/login-barbershop";
 import { Barbershop } from "@/interfaces/barbershop";
 import { AppError } from "@/lib/app-error";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 
 interface AuthContextType {
   authenticatedBarbershop: Barbershop | null
@@ -31,19 +32,25 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     mutationFn: loginBarbershop
   })
 
-  const fetchAuthenticatedBarbershop = async () => {
-    const barbershop: Barbershop = {
-      contactName: "Pedro",
-      contactPhone: "(11) 12345-6789",
-      email: "pedro@barberia.com",
-      id: "123-123",
-      name: "Pedro Cortes"
-    }
+  const {mutateAsync: getAuthenticatedBarbershopApi} = useMutation({
+    mutationFn: getAuthenticatedBarbershop
+  })
 
-    setAuthenticatedBarbershop(barbershop)
+  const fetchAuthenticatedBarbershop = useCallback(async () => {
+    try {
+      const response = await getAuthenticatedBarbershopApi()
+      const barbershopFromApi = response.data.barbershop
 
-    return barbershop
-  }
+      console.log("> barbershopFromApi", barbershopFromApi);
+      
+
+      setAuthenticatedBarbershop(barbershopFromApi)
+      return barbershopFromApi
+    } catch(error) {
+      console.error("> Erro ao buscar barbearia autenticada");
+      console.error(error);
+    } 
+  }, [getAuthenticatedBarbershopApi])
 
   const login = async ({ email,password }: LoginParams) => {
     
@@ -73,6 +80,16 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       throw new AppError("Erro ao tentar fazer login, tente novamente mais tarde")
     } 
   }
+
+  useEffect(() => {
+    const tokenFromStorage = localStorage.getItem('@barber-app-web:token-1.0.0')
+
+    if(!tokenFromStorage) {
+      return
+    }
+
+    fetchAuthenticatedBarbershop()
+  }, [fetchAuthenticatedBarbershop])
 
   return (
     <AuthContext.Provider 
