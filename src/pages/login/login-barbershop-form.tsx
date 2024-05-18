@@ -8,7 +8,10 @@ import { Loader2 } from "lucide-react"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { loginBarbershop } from "@/api/login-barbershop"
+import { useAuth } from "@/hooks/use-auth"
+import { useNavigate } from "react-router-dom"
+import { AppError } from "@/lib/app-error"
+import { toast } from "sonner"
 
 interface BarbershopRegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -21,18 +24,30 @@ type loginBarbershopFormSchemaInputs = z.infer<typeof loginBarbershopFormSchema>
 
 export function LoginBarbershopForm({ className, ...props }: BarbershopRegisterFormProps) {
 
+  const navigate = useNavigate()
+  const { login } = useAuth()
+
   const {register, handleSubmit, formState: {isLoading}} = useForm<loginBarbershopFormSchemaInputs>({
     resolver: zodResolver(loginBarbershopFormSchema),
   })
 
   const handleRegisterBarbershop = async (data: loginBarbershopFormSchemaInputs) => {
     
-    loginBarbershop({
-      email: data.email,
-      password: data.password
-    }).then(() => {
-      
-    })
+    try {
+      await login({
+        email: data.email,
+        password: data.password
+      })
+
+      navigate("/agenda")
+    } catch (error) {
+      if(error instanceof AppError) {
+        toast.error(error.message)
+        return
+      }
+
+      toast.error("Erro ao tentar fazer login")
+    }
 
   }
 

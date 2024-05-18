@@ -35,7 +35,7 @@ export function Sidebar({ className }: SidebarProps) {
                 <img src="logo-barbearia.jpeg" className='w-10 h-10 rounded-full'/>
 
                 <div className='flex flex-col items-start'>
-                  <p className='font-bold'>Barbearia do seu zé</p>
+                  <p className='font-bold text-start'>Barbearia do seu zé</p>
                   <p className='text-primary'>Nível 7</p>
                 </div>
               </button>

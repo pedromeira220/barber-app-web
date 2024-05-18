@@ -5,11 +5,15 @@ export interface LoginBarbershopQuery {
   password: string
 }
 
+export interface LoginBarbershopResponse {
+  token: string
+}
+
 export async function loginBarbershop({
   email,
   password,
 }: LoginBarbershopQuery) {
-  return api.post(`/barbershops`, {
+  return api.post<LoginBarbershopResponse>(`/login`, {
     email,
     password,
   })

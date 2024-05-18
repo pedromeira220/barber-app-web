@@ -8,7 +8,7 @@ export default function Login() {
         <Button
           className={"absolute right-4 top-4 md:right-8 md:top-8"}
         >
-          Entrar
+          Criar conta
         </Button>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0 bg-zinc-900" />
@@ -41,30 +41,13 @@ export default function Login() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Crie uma conta para sua barbearia
+                Entre na conta da sua barbearia
               </h1>
               <p className="text-sm text-muted-foreground">
-                Insira as informações abaixo para criar a conta
+                Insira as informações abaixo para entrar
               </p>
             </div>
             <LoginBarbershopForm />
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              Ao clicar em "cadastrar", você concorda com nossos{" "}
-              <a
-                href="/terms"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Termos de serviço
-              </a>{" "}
-              e{" "}
-              <a
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Política de privacidade
-              </a>
-              .
-            </p>
           </div>
         </div>
       </div>
