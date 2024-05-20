@@ -4,6 +4,7 @@ import RegisterBarbershop from "./cadastrar-barbearia"
 import { Agenda } from "./agenda"
 import { Profissionais } from "./profissionais"
 import { Clientes } from "./clientes"
+import { Servicos } from "./servicos"
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
   {
     path: "/clientes",
     element: <Clientes />
+  },
+  {
+    path: "/servicos",
+    element: <Servicos />
   }
 
 ])
