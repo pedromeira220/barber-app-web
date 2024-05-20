@@ -1,17 +1,19 @@
 import { cn } from '@/lib/utils'
 import { ComponentProps, useState } from 'react'
 import { Button } from '../ui/button'
-import { Calendar, Home } from 'lucide-react'
+import { Calendar, Contact, Scissors, Users } from 'lucide-react'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import { DialogUpdateBarbershop } from './dialog-update-barbershop'
 import { useAuth } from '@/hooks/use-auth'
+import { useNavigate } from 'react-router-dom'
 
 interface SidebarProps extends ComponentProps<'div'> { }
 
 export function Sidebar({ className }: SidebarProps) {
 
-  const {authenticatedBarbershop} = useAuth()
+  const navigate = useNavigate()
 
+  const {authenticatedBarbershop} = useAuth()
 
   // const { data: profile, isLoading: isLoadingProfile } = useQuery({
   //   queryKey: ['barbershop'],
@@ -19,8 +21,11 @@ export function Sidebar({ className }: SidebarProps) {
   //   staleTime: Infinity,
   // })
 
-
   const [isUpdateBarbershopDialogOpen, setIsUpdateBarbershopDialogOpen] = useState(false)
+
+  const handleChangeRoute = (routeName: string) => {
+    navigate(routeName)
+  }
 
   return (
     <div className={cn('pb-4 h-full', className)}>
@@ -59,13 +64,39 @@ export function Sidebar({ className }: SidebarProps) {
           </Dialog>
 
           <div className="flex flex-col gap-1">
-            <Button variant="ghost" className="w-full justify-start">
-              <Home size={24} className="mr-2 h-4 w-4" />
-              Início
-            </Button>
-            <Button variant="secondary" className="w-full justify-start">
+            <Button variant="ghost" className="w-full justify-start"
+              onClick={() => {
+                handleChangeRoute("/agenda")
+              }}
+            >
               <Calendar size={24} className="mr-2 h-4 w-4" />
               Agenda
+            </Button>
+            <Button variant="ghost" className="w-full justify-start"
+              onClick={() => {
+                handleChangeRoute("/profissionais")
+              }}
+            >
+              <Contact size={24} className="mr-2 h-4 w-4" />
+              Profissionais
+            </Button>
+
+            <Button variant="ghost" className="w-full justify-start"
+              onClick={() => {
+                handleChangeRoute("/servicos")
+              }}
+            >
+              <Scissors size={24} className="mr-2 h-4 w-4" />
+              Serviços
+            </Button>
+
+            <Button variant="ghost" className="w-full justify-start"
+              onClick={() => {
+                handleChangeRoute("/clientes")
+              }}
+            >
+              <Users size={24} className="mr-2 h-4 w-4" />
+              Clientes
             </Button>
           </div>
         </div>
