@@ -1,0 +1,24 @@
+.label {
+  font-size: 14px;
+  color: #344054;
+}
+
+.control {
+  display: flex;
+  flex: 1;
+  background: transparent;
+  border: 0;
+  display: flex;
+  justify-items: center;
+  gap: 8px;
+  border: 1px solid #D0D5DD;
+  padding: 8px 12px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.control::placeholder {
+  color: #667085;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
