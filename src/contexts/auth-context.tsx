@@ -2,13 +2,16 @@ import { getAuthenticatedBarbershop } from "@/api/get-authenticated-barbershop";
 import { loginBarbershop } from "@/api/login-barbershop";
 import { Barbershop } from "@/interfaces/barbershop";
 import { AppError } from "@/lib/app-error";
-import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import React, { createContext, useCallback, useEffect, useState } from "react";
 
 interface AuthContextType {
   authenticatedBarbershop: Barbershop | null
   login: ({ email, password }: LoginParams) => Promise<void>
+  isLoginPending: boolean
+  isGetAuthBarberPending: boolean
+  fetchAuthenticatedBarbershop: () => Promise<Barbershop | undefined>
+  logout: () => Promise<void>
 }
 
 export const AuthContext = createContext({} as AuthContextType)
@@ -27,35 +30,31 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 }) => {
 
   const [authenticatedBarbershop, setAuthenticatedBarbershop] = useState<Barbershop | null>(null)
-
-  const {mutateAsync: loginBarbershopApi} = useMutation({
-    mutationFn: loginBarbershop
-  })
-
-  const {mutateAsync: getAuthenticatedBarbershopApi} = useMutation({
-    mutationFn: getAuthenticatedBarbershop
-  })
+  const [isGetAuthBarberPending, setIsGetAuthBarberPending] = useState(false)
+  const [isLoginPending, setIsLoginPending] = useState(false)
 
   const fetchAuthenticatedBarbershop = useCallback(async () => {
-    try {
-      const response = await getAuthenticatedBarbershopApi()
-      const barbershopFromApi = response.data.barbershop
 
-      console.log("> barbershopFromApi", barbershopFromApi);
-      
+    setIsGetAuthBarberPending(true)
+
+    try {
+      const response = await getAuthenticatedBarbershop()
+      const barbershopFromApi = response.data.barbershop
 
       setAuthenticatedBarbershop(barbershopFromApi)
       return barbershopFromApi
     } catch(error) {
       console.error("> Erro ao buscar barbearia autenticada");
       console.error(error);
-    } 
-  }, [getAuthenticatedBarbershopApi])
+    } finally {
+      setIsGetAuthBarberPending(false)
+    }
+  }, [])
 
   const login = async ({ email,password }: LoginParams) => {
-    
+    setIsLoginPending(true)
     try {
-      const response = await loginBarbershopApi({
+      const response = await loginBarbershop({
         email,
         password
       })
@@ -78,11 +77,21 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       }
 
       throw new AppError("Erro ao tentar fazer login, tente novamente mais tarde")
-    } 
+    }  finally {
+      setIsLoginPending(false)
+    }
+  }
+
+  const logout = async () => {
+      setAuthenticatedBarbershop(null)
+      localStorage.removeItem('@barber-app-web:token-1.0.0')
   }
 
   useEffect(() => {
     const tokenFromStorage = localStorage.getItem('@barber-app-web:token-1.0.0')
+
+    console.log("> tokenFromStorage", tokenFromStorage);
+    
 
     if(!tokenFromStorage) {
       return
@@ -95,7 +104,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     <AuthContext.Provider 
       value={{
         authenticatedBarbershop,
-        login
+        login,
+        isGetAuthBarberPending,
+        isLoginPending,
+        fetchAuthenticatedBarbershop,
+        logout
       }}
     >
       {children}

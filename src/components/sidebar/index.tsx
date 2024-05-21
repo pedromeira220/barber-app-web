@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { ComponentProps, useState } from 'react'
 import { Button } from '../ui/button'
-import { Calendar, Contact, Scissors, Users } from 'lucide-react'
+import { Calendar, Contact, LogOut, Scissors, Users } from 'lucide-react'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import { DialogUpdateBarbershop } from './dialog-update-barbershop'
 import { useAuth } from '@/hooks/use-auth'
@@ -13,7 +13,7 @@ export function Sidebar({ className }: SidebarProps) {
 
   const navigate = useNavigate()
 
-  const {authenticatedBarbershop} = useAuth()
+  const {authenticatedBarbershop, logout} = useAuth()
 
   // const { data: profile, isLoading: isLoadingProfile } = useQuery({
   //   queryKey: ['barbershop'],
@@ -27,10 +27,27 @@ export function Sidebar({ className }: SidebarProps) {
     navigate(routeName)
   }
 
+  const handleLogout = async () => {
+    if(!confirm("Tem certeza que deseja deslogar")) {
+      return
+    }
+    
+    try {
+      await logout()
+      navigate("/login")
+
+    } catch (error) {
+      console.error("Eror ao deslogar");
+      console.error(error);
+      
+    }
+
+  }
+
   return (
     <div className={cn('pb-4 h-full', className)}>
       <div className="py-4 px-3 flex flex-col h-full">
-        <div className="py-2 flex flex-col gap-4">
+        <div className="py-2 flex flex-col gap-4 h-full">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             NomeDoApp
           </h2>
@@ -97,6 +114,17 @@ export function Sidebar({ className }: SidebarProps) {
             >
               <Users size={24} className="mr-2 h-4 w-4" />
               Clientes
+            </Button>
+          </div>
+
+          <div className="flex mt-auto">
+            <Button variant="ghost" className="w-full justify-start"
+              onClick={() => {
+                handleLogout()
+              }}
+            >
+              <LogOut size={24} className="mr-2 h-4 w-4" />
+              Deslogar
             </Button>
           </div>
         </div>

@@ -1,7 +1,16 @@
 import { Button } from "@/components/ui/button"
 import { LoginBarbershopForm } from "./login-barbershop-form"
+import { useAuth } from "@/hooks/use-auth"
+import { Navigate } from "react-router-dom"
 
 export default function Login() {
+
+  const {authenticatedBarbershop} = useAuth()
+
+  if(authenticatedBarbershop) {
+    return <Navigate to="/agenda"/>
+  }
+
   return (
     <>
       <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
