@@ -1,10 +1,6 @@
-import * as React from "react"
-
 import { useState } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import styles from "./style.css"
 
 import {
   Table,
@@ -22,9 +18,9 @@ export function Profissionais() {
   ]);
   const [form, setForm] = useState({ nome: '', email: '', telefone: '', cpf: '' });
   const [showForm, setShowForm] = useState(false);
-  const [selectedProfissionalId, setSelectedProfissionalId] = useState(null); 
+  const [selectedProfissionalId, setSelectedProfissionalId] = useState<null | number>(null); 
 
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  const handleChange = (e: { target: { name: string; value: string } }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -38,8 +34,13 @@ export function Profissionais() {
     setProfissionais(profissionais.filter(profissional => profissional.id !== id));
   };
 
-  const handleEdit = (id: number | React.SetStateAction<null>) => { 
+  const handleEdit = (id: number) => { 
     const profissional = profissionais.find((profissional) => profissional.id === id);
+
+    if(!profissional) {
+      return
+    }
+
     setForm(profissional);
     setSelectedProfissionalId(id);
     setShowForm(true); 
@@ -62,7 +63,7 @@ export function Profissionais() {
   };
 
   return (
-    <div className="container grid min-h-screen grid-cols-5">
+    <div className="grid min-h-screen grid-cols-5">
       <Sidebar />
 
       <div className="col-span-4 flex flex-col gap-4 border-l p-6">
