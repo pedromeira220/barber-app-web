@@ -5,10 +5,12 @@ import React from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { Barbershop } from '@/interfaces/barbershop'
 import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog'
+import { updateBarbershop } from '@/api/update-barbershop'
+import { useAuth } from '@/hooks/use-auth'
 
 export interface DialogUpdateBarbershopProps {
   barbershop: Barbershop
@@ -28,18 +30,12 @@ export const DialogUpdateBarbershop: React.FC<DialogUpdateBarbershopProps> = ({
   barbershop,
   setOpen,
 }) => {
-  const queryClient = useQueryClient()
 
-  const { mutateAsync: updateBarbershopFn, isPending } = useMutation({
+  const {fetchAuthenticatedBarbershop} = useAuth()
+
+  const { mutateAsync: updateBarbershopApi, isPending } = useMutation({
     // mutationFn: updateBarbershop,
-    mutationFn: async () => {},
-    onSuccess: () => {
-      setOpen(false)
-
-      queryClient.invalidateQueries({
-        queryKey: ['barbershops'],
-      })
-    },
+    mutationFn: updateBarbershop
   })
 
   const {
@@ -56,16 +52,20 @@ export const DialogUpdateBarbershop: React.FC<DialogUpdateBarbershopProps> = ({
     },
   })
 
-  const handleUpdateBarbershop = async (/*data: updateBarbershopInputs*/) => {
-    updateBarbershopFn(
-      // {
-      //   contactName: data.contactName,
-      //   contactPhone: data.contactPhone,
-      //   email: data.email,
-      //   name: data.name,
-      //   id: barbershop.id,
-      // }
-    )
+  const handleUpdateBarbershop = async (data: updateBarbershopInputs) => {
+    updateBarbershopApi(
+      {
+        contactName: data.contactName,
+        contactPhone: data.contactPhone,
+        email: data.email,
+        name: data.name,
+        id: barbershop.id,
+      }
+    ).then(() => {
+      setOpen(false)
+      
+      return fetchAuthenticatedBarbershop()
+    })
   }
 
   return (

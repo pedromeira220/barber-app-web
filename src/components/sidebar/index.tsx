@@ -44,12 +44,17 @@ export function Sidebar({ className }: SidebarProps) {
 
   }
 
+  if(!authenticatedBarbershop) {
+    return null
+  }
+
   return (
     <div className={cn('pb-4 h-full', className)}>
       <div className="py-4 px-3 flex flex-col h-full">
         <div className="py-2 flex flex-col gap-4 h-full">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            NomeDoApp
+            BarberHub 
+            {/* TODO: colocar aqui o logo */}
           </h2>
 
           <Dialog
@@ -68,14 +73,7 @@ export function Sidebar({ className }: SidebarProps) {
             </DialogTrigger>
 
             <DialogUpdateBarbershop
-              barbershop={{
-                contactName: "José",
-                contactPhone: "(11) 12345-6789",
-                email: "jose@barberia.com",
-                id: "123",
-                name: "Barbearia do seu Zé"
-
-              }}
+              barbershop={authenticatedBarbershop}
               setOpen={setIsUpdateBarbershopDialogOpen}
             />
           </Dialog>
