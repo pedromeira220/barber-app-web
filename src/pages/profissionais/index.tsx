@@ -119,18 +119,19 @@ export function Profissionais() {
                   <TableCell>{profissional.telefone}</TableCell>
                   <TableCell>{profissional.cpf}</TableCell>
                   <TableCell className="text-right">
-                    <button 
+                    <Button 
                       onClick={() => handleEdit(profissional.id)} 
-                      className="border border-gray-400 text-black bg-transparent font-semibold py-1 px-2 rounded"
+                      variant="outline"
+                      className="mr-4"
                     >
                       Editar
-                    </button>
-                    <button 
+                    </Button>
+                    <Button 
                       onClick={() => handleDelete(profissional.id)} 
-                      className="bg-gray-200 text-black font-semibold py-1 px-2 rounded ml-2"
+                      variant="secondary" 
                     >
                       Deletar
-                    </button>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
