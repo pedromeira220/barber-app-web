@@ -1,13 +1,61 @@
-import { Sidebar } from "@/components/sidebar"
-import { Button } from "@/components/ui/button"
-import styles from "./style.css"
-// Para fazer a estilização usando o css ao inves do tailwind, utilize esse objeto que contem as classes css
-
-// Na hora de colocar em um elemento seria algo assim
-// <div className={style.container}></div>
-// Coloque entre chaves e acesse o nome da propriedade definida no arquivo css
-
+import { Sidebar } from "@/components/sidebar";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useState } from "react";
 export function Clientes() {
+  const [clientes, setClientes] = useState([
+    { id: 1, nome: 'Cliente João', telefone: '11 99999-9999' },
+    { id: 2, nome: 'Cliente Maria', telefone: '11 88888-8888' },
+    
+  ]);
+  const [form, setForm] = useState({ nome: '', telefone: '' });
+  const [showForm, setShowForm] = useState(false);
+  const [selectedClienteId, setSelectedClienteId] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prevForm => ({ ...prevForm, [name]: value }));
+  };
+
+  const handleAdd = () => {
+    const newId = clientes.length ? clientes[clientes.length - 1].id + 1 : 1;
+    setClientes(prev => [
+      ...prev,
+      { ...form, id: newId },
+    ]);
+    setForm({ nome: '', telefone: '' });
+    setShowForm(false);
+  };
+
+  const handleUpdate = () => {
+    setClientes(prev => 
+      prev.map(cliente => 
+        cliente.id === selectedClienteId ? { ...form, id: selectedClienteId } : cliente
+      )
+    );
+    setForm({ nome: '', telefone: '' });
+    setShowForm(false);
+    setSelectedClienteId(null);
+  };
+
+  const handleEdit = (id) => {
+    const cliente = clientes.find(cli => cli.id === id);
+    setForm(cliente);
+    setShowForm(true);
+    setSelectedClienteId(id);
+  };
+
+  const handleDelete = (id) => {
+    setClientes(prev => prev.filter(cli => cli.id !== id));
+  };
+
   return (
     <div className="grid min-h-screen grid-cols-5">
       <Sidebar />
@@ -24,15 +72,52 @@ export function Clientes() {
           </div>
 
           <div className="flex flex-row gap-2">
-            <Button>Cadastrar cliente</Button>
+            <Button onClick={() => setShowForm(true)}>Cadastrar cliente</Button>
           </div>
-            
         </div>
 
         <div className="rounded-md border">
-          <p>tabela com os dados dos clientes</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[200px]">Nome</TableHead>
+                <TableHead>Telefone</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {clientes.map(cliente => (
+                <TableRow key={cliente.id}>
+                  <TableCell>{cliente.nome}</TableCell>
+                  <TableCell>{cliente.telefone}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex gap-2 justify-end">
+                      <Button variant="outline" onClick={() => handleEdit(cliente.id)}>Editar</Button>
+                      <Button variant="secondary" onClick={() => handleDelete(cliente.id)}>Deletar</Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
+
+        {showForm && (
+          <div className="rounded-md border p-4">
+            <form className="flex flex-col gap-2">
+              <input type="text" name="nome" placeholder="Nome do cliente" value={form.nome} onChange={handleChange} className="p-2 border rounded" />
+              <input type="text" name="telefone" placeholder="Telefone" value={form.telefone} onChange={handleChange} className="p-2 border rounded" />
+              <div className="flex justify-end">
+                {selectedClienteId ? (
+                  <Button onClick={handleUpdate} type="button">Atualizar</Button>
+                ) : (
+                  <Button onClick={handleAdd} type="button">Adicionar</Button>
+                )}
+              </div>
+            </form>
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
