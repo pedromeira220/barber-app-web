@@ -12,15 +12,15 @@ import { useState } from "react";
 
 export function Servicos() {
   const [servicos, setServicos] = useState([
-    { id: 1, nome: 'Corte Simples', preco: '30.00', barbearia: 'Barbearia A', duracao: '30 min', descricao: 'Corte de cabelo simples' },
-    { id: 2, nome: 'Barba', preco: '20.00', barbearia: 'Barbearia B', duracao: '20 min', descricao: 'Aparar e modelar a barba' },
+    { id: "1", nome: 'Corte Simples', preco: '30.00', barbearia: 'Barbearia A', duracao: '30 min', descricao: 'Corte de cabelo simples' },
+    { id: "2", nome: 'Barba', preco: '20.00', barbearia: 'Barbearia B', duracao: '20 min', descricao: 'Aparar e modelar a barba' },
   ]);
   
   const [form, setForm] = useState({ nome: '', preco: '', barbearia: '', duracao: '', descricao: '' });
   const [showForm, setShowForm] = useState(false);
-  const [selectedServicoId, setSelectedServicoId] = useState(null);
+  const [selectedServicoId, setSelectedServicoId] = useState<string | null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
     setForm(prevForm => ({ ...prevForm, [name]: value }));
   };
@@ -28,7 +28,7 @@ export function Servicos() {
   const handleAdd = () => {
     setServicos(prev => [
       ...prev,
-      { ...form, id: prev.length ? prev[prev.length - 1].id + 1 : 1 },
+      { ...form, id: prev.length ? String(prev[prev.length - 1].id) + 1 : "1" },
     ]);
     setForm({ nome: '', preco: '', barbearia: '', duracao: '', descricao: '' });
     setShowForm(false);
@@ -45,14 +45,19 @@ export function Servicos() {
     setSelectedServicoId(null);
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = (id: string) => {
     const servico = servicos.find(serv => serv.id === id);
+
+    if(!servico) {
+      return
+    }
+
     setForm(servico);
     setShowForm(true);
     setSelectedServicoId(id);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     setServicos(prev => prev.filter(serv => serv.id !== id));
   };
 
@@ -111,7 +116,6 @@ export function Servicos() {
             <form className="flex flex-col gap-2">
               <input type="text" name="nome" placeholder="Nome do serviço" value={form.nome} onChange={handleChange} className="p-2 border rounded" />
               <input type="text" name="preco" placeholder="Preço" value={form.preco} onChange={handleChange} className="p-2 border rounded" />
-              <input type="text" name="barbearia" placeholder="Barbearia" value={form.barbearia} onChange={handleChange} className="p-2 border rounded" />
               <input type="text" name="duracao" placeholder="Duração" value={form.duracao} onChange={handleChange} className="p-2 border rounded" />
               <input type="text" name="descricao" placeholder="Descrição" value={form.descricao} onChange={handleChange} className="p-2 border rounded" />
               <div className="flex justify-end">
