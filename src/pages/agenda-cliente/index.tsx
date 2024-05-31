@@ -76,7 +76,7 @@ const SelectContent = React.forwardRef<
       className={cn(
         "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper" &&
-          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+        "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className
       )}
       position={position}
@@ -87,7 +87,7 @@ const SelectContent = React.forwardRef<
         className={cn(
           "p-1",
           position === "popper" &&
-            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
+          "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
         )}
       >
         {children}
@@ -148,7 +148,7 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 
 const AgendaCliente: React.FC = () => {
-    const [profissionalSelecionado,] = useState('');
+  const [profissionalSelecionado,] = useState('');
 
   // Função para lidar com o clique no botão "Agendar"
   const handleAgendarClick = () => {
@@ -161,10 +161,10 @@ const AgendaCliente: React.FC = () => {
   };
   return (
     <div className="container">
-      <div className="inner-container">
-        <h1>Agenda</h1>
+      <div className="inner-container lg:h-[80%]">
+        <h1>Agendar</h1>
         <div className="divider-horizontal"></div>
-        <div className="content">
+        <div className="grid w-full grid-cols-1 lg:grid-cols-2 lg:gap-6">
           <div className="left-side">
             <div className="service-container">
               <img src={secadorImg} alt="Secador" className="service-image" />
@@ -178,7 +178,7 @@ const AgendaCliente: React.FC = () => {
               Selecionar <span className="bold">Profissional</span>
             </p>
             <Select>
-              <SelectTrigger className="select-trigger">
+              <SelectTrigger className="mt-4">
                 <SelectValue placeholder="Escolha um profissional" />
               </SelectTrigger>
               <SelectContent>
@@ -187,35 +187,40 @@ const AgendaCliente: React.FC = () => {
                 <SelectItem value="prof3">Joao</SelectItem>
               </SelectContent>
             </Select>
-            <Button
-               onClick={handleAgendarClick} // Chame a função de clique ao clicar no botão
-               className="orange-button" // Adicione a classe CSS para cor laranja
-            >
-              Agendar
-            </Button>
+
 
           </div>
-          <div className="divider-vertical"></div>
+
           <div className="right-side">
+
             <p className="data-title"><strong>Data</strong></p> {/* Adiciona o texto "Data" em negrito */}
             <DatePickerFilter /> {/* Adiciona o componente de calendário */}
             <p className="hora-title"><strong>Hora</strong></p> {/* Adiciona o texto "Hora" em negrito */}
+
             <div className="horarios-container">
-            <div className="horarios-row">
-      {['09:00', '10:00', '11:00', '12:00'].map(hora => (
-        <div key={hora} className="horario-item">{hora}</div>
-      ))}
-    </div>
-    <div className="horarios-row">
-      {['13:00', '14:00', '15:00', '16:00'].map(hora => (
-        <div key={hora} className="horario-item">{hora}</div>
-      ))}
-    </div>
-  </div>
-</div>
+              <div className="horarios-row">
+                {['09:00', '10:00', '11:00', '12:00'].map(hora => (
+                  <div key={hora} className="horario-item">{hora}</div>
+                ))}
+              </div>
+              <div className="horarios-row">
+                {['13:00', '14:00', '15:00', '16:00'].map(hora => (
+                  <div key={hora} className="horario-item">{hora}</div>
+                ))}
+              </div>
+
             </div>
           </div>
         </div>
+
+        <Button
+          onClick={handleAgendarClick} // Chame a função de clique ao clicar no botão
+          className='w-full mt-8'
+        >
+          Agendar
+        </Button>
+      </div>
+    </div>
   );
 };
 

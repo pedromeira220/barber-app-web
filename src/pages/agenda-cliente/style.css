@@ -8,8 +8,7 @@
   }
   
   .inner-container {
-    width: 80%;
-    height: 80%;
+    max-width: 960px;
     border: 1px solid #ccc;
     padding: 20px;
     background-color: #fff;
@@ -17,7 +16,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
   }
   
   h1 {
@@ -34,21 +32,15 @@
     margin: 20px 0;
   }
   
-  .content {
-    display: flex;
-    width: 100%;
-    height: 100%;
-  }
-  
   .left-side, .right-side {
-    flex: 1;
     padding: 20px;
+    width: 100%;
   }
-  
+
   .divider-vertical {
     width: 1px;
     background-color: #ccc;
-    margin: 0 20px;
+      margin: 0 20px;
   }
   
   .service-container {
@@ -58,7 +50,6 @@
     padding: 10px;
     margin-top: 20px;
     box-shadow: 0 2px 4px #0000001a;
-    width: 400px; 
   }
   
   .service-image {
@@ -99,11 +90,6 @@
     font-weight: bold;
   }
   
-  .select-trigger {
-    margin-top: 10px;
-    width: 300px;
-  }
-  
   .data-title {
     margin-bottom: 10px;
     font-size: 18px;
@@ -119,13 +105,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    gap: 12px;
   }
   
   .horarios-row {
+    width: 100%;
     display: flex;
     gap: 10px; 
-    margin-bottom: 20px;
-    margin-right: 150px;
   }
   
   .horario-item {
@@ -148,23 +135,7 @@
     background-color: #FFA500; 
     color: white; 
   }
-  .right-side {
-    flex: 1; 
-    margin-left: 20px;
-  }
 
-.orange-button {
-    background-color: orange;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 40px; 
-    width: 400px;
-  }
-  
   .orange-button:hover {
     background-color: darkorange; 
   }
