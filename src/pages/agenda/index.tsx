@@ -6,6 +6,9 @@ import { useAuth } from "@/hooks/use-auth"
 import { CloudSun, MoonStar, Sunrise } from "lucide-react"
 import { SelectFilter } from "./select-filter"
 import { DatePickerFilter } from "./date-picker-filter"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import { DialogRegisterBooking } from "./dialog-register-booking"
+import { useState } from "react"
 // Para fazer a estilização usando o css ao inves do tailwind, utilize esse objeto que contem as classes css
 
 // Na hora de colocar em um elemento seria algo assim
@@ -14,6 +17,8 @@ import { DatePickerFilter } from "./date-picker-filter"
 
 export function Agenda() {
   const {authenticatedBarbershop} = useAuth()
+
+  const [dialogRegisterBookingIsOpen, setDialogRegisterBookingIsOpen] = useState(false)
 
   return (
     <div className="grid min-h-screen grid-cols-5">
@@ -32,7 +37,20 @@ export function Agenda() {
 
           <div className="flex flex-row gap-2">
             <Button variant="outline">Bloquear horário</Button>
-            <Button>Cadastrar agendamento</Button>
+            <Dialog
+              open={dialogRegisterBookingIsOpen}
+              onOpenChange={setDialogRegisterBookingIsOpen}
+            >
+              <DialogTrigger asChild>
+                <Button>Cadastrar agendamento</Button>
+              </DialogTrigger>
+
+              <DialogRegisterBooking 
+                setOpen={setDialogRegisterBookingIsOpen}
+              />
+            </Dialog>
+            
+            
           </div>
             
         </div>
