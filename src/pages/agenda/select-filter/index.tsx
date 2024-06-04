@@ -22,7 +22,7 @@ export const SelectFilter: React.FC<SelectFilterProps> = ({placeholder, label, i
           {
             items.map(item => {
               return (
-                <SelectItem value={item.id}>{item.display}</SelectItem>
+                <SelectItem value={item.id} key={item.id}>{item.display}</SelectItem>
               )
             })
           }

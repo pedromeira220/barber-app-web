@@ -86,11 +86,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       setAuthenticatedBarbershop(null)
       localStorage.removeItem('@barber-app-web:token-1.0.0')
   }
-
   useEffect(() => {
     const tokenFromStorage = localStorage.getItem('@barber-app-web:token-1.0.0')
-
-    console.log("> tokenFromStorage", tokenFromStorage);
     
 
     if(!tokenFromStorage) {
