@@ -1,5 +1,6 @@
 import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -18,6 +19,7 @@ export function Clientes() {
   const [form, setForm] = useState({ nome: '', telefone: '' });
   const [showForm, setShowForm] = useState(false);
   const [selectedClienteId, setSelectedClienteId] = useState(null);
+  const [searchText, setSearchText] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +49,10 @@ export function Clientes() {
 
   const handleEdit = (id) => {
     const cliente = clientes.find(cli => cli.id === id);
-    setForm(cliente);
+    setForm({
+      nome: cliente?.nome,
+      telefone: cliente?.telefone
+    });
     setShowForm(true);
     setSelectedClienteId(id);
   };
@@ -55,6 +60,12 @@ export function Clientes() {
   const handleDelete = (id) => {
     setClientes(prev => prev.filter(cli => cli.id !== id));
   };
+
+  const clientesFiltrados = searchText.length > 0 ? 
+  clientes.filter(cliente => cliente.nome.toLowerCase().includes(searchText.toLowerCase()))
+  :[]
+
+  const listaDeClientesParaExibir = searchText.length > 0 ? clientesFiltrados : clientes
 
   return (
     <div className="grid min-h-screen grid-cols-5">
@@ -76,6 +87,14 @@ export function Clientes() {
           </div>
         </div>
 
+        <div>
+          <Input type="text" placeholder="Procure um cliente..." 
+            onChange={(event) => {
+              setSearchText(event.target.value)
+            }}
+          />
+        </div>
+
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -86,7 +105,7 @@ export function Clientes() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {clientes.map(cliente => (
+              {listaDeClientesParaExibir.map(cliente => (
                 <TableRow key={cliente.id}>
                   <TableCell>{cliente.nome}</TableCell>
                   <TableCell>{cliente.telefone}</TableCell>
