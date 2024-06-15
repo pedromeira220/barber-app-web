@@ -1,11 +1,14 @@
 import { fetchBookingsFromAuthBarbershop } from "@/api/fetch-bookings-from-auth-barbershop";
 import { useQuery } from "@tanstack/react-query";
 import { CloudSun, MoonStar, Sunrise } from "lucide-react"
-import React, { useMemo } from "react";
-import { SelectFilter } from "./select-filter";
-import { DatePickerFilter } from "./date-picker-filter";
+import React, { useMemo, useState } from "react";
 import { format, getHours } from "date-fns";
 import { Booking } from "@/interfaces/booking";
+import { fetchProfessionalsFromBarbershop } from "@/api/fetch-professionals-from-barbershop";
+import { useAuth } from "@/hooks/use-auth";
+import { fetchServicesFromBarbershop } from "@/api/fetch-services-from-barbershop";
+import { SelectComponent } from "./dialog-register-booking/select-component";
+import { DatePicker } from "./dialog-register-booking/date-picker";
 
 const PERIODS = [
   {
@@ -30,12 +33,44 @@ const PERIODS = [
 
 export const BookingList: React.FC = () => {
 
+  const { authenticatedBarbershop } = useAuth()
+
+  const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined)
+  const [professionalIdFilter, setProfessionalIdFilter] = useState<string | undefined>(undefined)
+  const [serviceIdFilter, setServiceIdFilter] = useState<string | undefined>(undefined)
+
   const { data: bookings } = useQuery({
-    queryKey: ["bookings"], //TODO: passar aqui os filtros
+    queryKey: ["bookings", professionalIdFilter, dateFilter, serviceIdFilter],
+    enabled: !!dateFilter,
     queryFn: async () => {
-      const response = await fetchBookingsFromAuthBarbershop({})
+      console.log("> executou");
+      
+
+      const response = await fetchBookingsFromAuthBarbershop({
+        date: dateFilter,
+        professionalId: professionalIdFilter,
+        serviceId: serviceIdFilter
+      })
 
       return response.data.bookings
+    },
+  })
+
+  const { data: professionals } = useQuery({
+    queryKey: ["professionals", "barbershop", authenticatedBarbershop?.id],
+    queryFn: async () => {
+      const response = await fetchProfessionalsFromBarbershop({ barbershopId: authenticatedBarbershop?.id ?? "" })
+
+      return response.data.professionals
+    }
+  })
+
+  const { data: services } = useQuery({
+    queryKey: ["services", "barbershop", authenticatedBarbershop?.id],
+    queryFn: async () => {
+      const response = await fetchServicesFromBarbershop({ barbershopId: authenticatedBarbershop?.id ?? "" })
+
+      return response.data.services
     }
   })
 
@@ -62,45 +97,34 @@ export const BookingList: React.FC = () => {
     <>
 
       <div className="flex items-center gap-8">
-        <SelectFilter
+        <SelectComponent
           placeholder="Selecione um profissional"
-          label="Profissional"
-          items={[{
-            display: "Pedro",
-            id: "pedro"
-          },
-          {
-            display: "José",
-            id: "jose"
-          },
-          {
-            display: "João",
-            id: "joao"
-          },
-          {
-            display: "Fulano",
-            id: "fulano"
-          }]}
+          items={
+            !professionals ? [] : professionals?.map(professional => {
+              return {
+                display: professional.name,
+                id: professional.id
+              }
+            })}
+          onValueChange={setProfessionalIdFilter}
         />
 
-        <SelectFilter
-          placeholder="Selecione um serviço"
-          label="Serviços"
-          items={[{
-            display: "Corte",
-            id: "corte"
-          },
-          {
-            display: "Corte e barba",
-            id: "corte-barba"
-          },
-          {
-            display: "barba",
-            id: "barba"
-          }]}
+        <SelectComponent
+          placeholder="Selecione o serviço"
+          items={
+            !services ? [] : services?.map(service => {
+              return {
+                display: service.name,
+                id: service.id
+              }
+            })}
+          onValueChange={setServiceIdFilter}
         />
 
-        <DatePickerFilter />
+        <DatePicker 
+          date={dateFilter ? dateFilter : undefined}
+          onSelectDate={setDateFilter}
+        />
       </div>
 
       <div className="flex flex-col gap-8">
@@ -108,7 +132,7 @@ export const BookingList: React.FC = () => {
         {
           bookingsSeparateByPeriod.length == 0 ? (
             <>
-              <p>Não há agendamentos cadastrados</p> 
+              <p className="w-full text-center mt-20">Não há agendamentos no dia</p>
               {/* TODO: melhorar o design disso */}
             </>
           ) : null

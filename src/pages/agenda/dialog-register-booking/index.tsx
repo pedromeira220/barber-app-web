@@ -54,7 +54,7 @@ export const DialogRegisterBooking: React.FC<DialogRegisterBookingProps> = ({set
     }
   })
 
-  const { register, control, handleSubmit } = useForm<RegisterBookingManuallyFormSchemaInputs>({
+  const { register, control, handleSubmit, formState: {isValid} } = useForm<RegisterBookingManuallyFormSchemaInputs>({
     resolver: zodResolver(registerBookingManuallyFormSchema),
     defaultValues: {
       date: undefined
@@ -196,32 +196,14 @@ export const DialogRegisterBooking: React.FC<DialogRegisterBookingProps> = ({set
               return (
                 <SelectComponent
                   placeholder="Selecione o horário"
-                  items={[
-                    {
-                      display: "01:00",
-                      id: String(1 * 60) // 01:00
-                    },
-                    {
-                      display: "01:30",
-                      id: String(1 * 60 + 30) // 01:30
-                    },
-                    {
-                      display: "02:00",
-                      id: String(2 * 60) // 02:00
-                    },
-                    {
-                      display: "02:30",
-                      id: String(2 * 60 + 30)
-                    },
-                    {
-                      display: "09:30",
-                      id: String(9 * 60 + 30)
-                    },
-                    {
-                      display: "10:30",
-                      id: String(10 * 60 + 30)
-                    },
-                  ]}
+                  items={Array.from({
+                    length: 24
+                  }).map((_, index) => {
+                    return {
+                      display: `${index}:00`,
+                      id: String(index * 60) 
+                    }
+                  })}
                   onValueChange={(value) => field.onChange(Number(value))}
                 />
               )
@@ -229,7 +211,7 @@ export const DialogRegisterBooking: React.FC<DialogRegisterBookingProps> = ({set
           />
         </div>
         <DialogFooter className="mt-4">
-          <Button type="submit" >
+          <Button type="submit" disabled={!isValid}>
             Cadastrar agendamento
           </Button>
         </DialogFooter>
