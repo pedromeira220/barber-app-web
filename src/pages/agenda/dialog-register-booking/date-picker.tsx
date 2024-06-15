@@ -11,9 +11,12 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from 'date-fns/locale/pt-BR';
 
-export const DatePicker: React.FC = () => {
+interface DatePickerProps {
+  date: Date | undefined
+  onSelectDate: (date: Date | undefined) => void
+}
 
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
+export const DatePicker: React.FC<DatePickerProps> = ({date, onSelectDate}) => {
 
   return (
     <Popover>
@@ -33,7 +36,7 @@ export const DatePicker: React.FC = () => {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={(date) => onSelectDate(date)}
           initialFocus
 
         />

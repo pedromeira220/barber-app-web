@@ -104,6 +104,16 @@ export const BookingList: React.FC = () => {
       </div>
 
       <div className="flex flex-col gap-8">
+
+        {
+          bookingsSeparateByPeriod.length == 0 ? (
+            <>
+              <p>Não há agendamentos cadastrados</p> 
+              {/* TODO: melhorar o design disso */}
+            </>
+          ) : null
+        }
+
         {
           bookingsSeparateByPeriod?.map((period) => {
             return (

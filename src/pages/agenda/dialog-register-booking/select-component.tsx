@@ -7,11 +7,12 @@ interface SelectFilterProps {
     id: string
     display: string
   }[]
+  onValueChange: (itemId: string) => void
 }
 
-export const SelectComponent: React.FC<SelectFilterProps> = ({placeholder, items}) => {
+export const SelectComponent: React.FC<SelectFilterProps> = ({placeholder, items, onValueChange}) => {
   return (
-    <Select>
+    <Select onValueChange={onValueChange}>
       <SelectTrigger className="col-span-3">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
