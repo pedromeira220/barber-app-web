@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,7 @@ export function Clientes() {
   const [selectedClienteId, setSelectedClienteId] = useState(null);
   const [searchText, setSearchText] = useState("")
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setForm(prevForm => ({ ...prevForm, [name]: value }));
   };
@@ -47,17 +48,22 @@ export function Clientes() {
     setSelectedClienteId(null);
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = (id: any) => {
     const cliente = clientes.find(cli => cli.id === id);
+
+    if(!cliente) {
+      return
+    }
+
     setForm({
-      nome: cliente?.nome,
-      telefone: cliente?.telefone
+      nome: cliente.nome,
+      telefone: cliente.telefone
     });
     setShowForm(true);
     setSelectedClienteId(id);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     setClientes(prev => prev.filter(cli => cli.id !== id));
   };
 
