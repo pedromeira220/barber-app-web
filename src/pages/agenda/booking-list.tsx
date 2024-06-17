@@ -44,7 +44,7 @@ export const BookingList: React.FC = () => {
     enabled: !!dateFilter,
     queryFn: async () => {
       console.log("> executou");
-      
+
 
       const response = await fetchBookingsFromAuthBarbershop({
         date: dateFilter,
@@ -121,55 +121,56 @@ export const BookingList: React.FC = () => {
           onValueChange={setServiceIdFilter}
         />
 
-        <DatePicker 
+        <DatePicker
           date={dateFilter ? dateFilter : undefined}
           onSelectDate={setDateFilter}
         />
       </div>
+      {
+        bookingsSeparateByPeriod.length == 0 ? (
+          <div className="flex flex-col gap-1 mt-20 items-center">
+            <img src="./date-picker.svg" className="w-60 h-60 mb-10" />
+            <p className="w-full text-center font-bold">Não há agendamentos no dia</p>
+            {
+              !dateFilter ? (
+                <p className="w-full text-center">Selecione uma data para visualizar agendamentos</p>
+              ) : null
+            }
+          </div>
+        ) : null
+      }
 
-      <div className="flex flex-col gap-8">
-
-        {
-          bookingsSeparateByPeriod.length == 0 ? (
-            <>
-              <p className="w-full text-center mt-20">Não há agendamentos no dia</p>
-              {/* TODO: melhorar o design disso */}
-            </>
-          ) : null
-        }
-
-        {
-          bookingsSeparateByPeriod?.map((period) => {
-            return (
-              <div className="rounded-md border" key={period.period}>
-                <div className="flex items-center justify-between px-3 py-5 border-b">
-                  <div className="flex items-center gap-3">
-                    {period.icon}
-                    <span className="text-sm">{period.period}</span>
-                  </div>
-
-                  <span>{period.startHour}h-{period.endHour}h</span>
+      {
+        bookingsSeparateByPeriod?.map((period) => {
+          return (
+            <div className="rounded-md border" key={period.period}>
+              <div className="flex items-center justify-between px-3 py-5 border-b">
+                <div className="flex items-center gap-3">
+                  {period.icon}
+                  <span className="text-sm">{period.period}</span>
                 </div>
 
-                <div className="p-5">
-
-                  {
-                    period.bookings.map(booking => {
-                      return (
-                        <div className="py-2 flex items-center gap-3" key={booking.id}>
-                          <span className="font-bold">{format(new Date(booking.startDate), "HH:mm")}-{format(new Date(booking.endDate), "HH:mm")}</span>
-                          <span>{booking.client.name} - {booking.service.name} - {booking.professional.name}</span>
-                        </div>
-                      )
-                    })
-                  }
-                </div>
-
+                <span>{period.startHour}h-{period.endHour}h</span>
               </div>
-            )
-          })
-        }
-      </div>
+
+              <div className="p-5">
+
+                {
+                  period.bookings.map(booking => {
+                    return (
+                      <div className="py-2 flex items-center gap-3" key={booking.id}>
+                        <span className="font-bold">{format(new Date(booking.startDate), "HH:mm")}-{format(new Date(booking.endDate), "HH:mm")}</span>
+                        <span>{booking.client.name} - {booking.service.name} - {booking.professional.name}</span>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+
+            </div>
+          )
+        })
+      }
     </>
   )
 }

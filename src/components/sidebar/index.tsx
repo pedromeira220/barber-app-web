@@ -52,10 +52,9 @@ export function Sidebar({ className }: SidebarProps) {
     <div className={cn('pb-4 h-full', className)}>
       <div className="py-4 px-3 flex flex-col h-full">
         <div className="py-2 flex flex-col gap-4 h-full">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            BarberHub 
-            {/* TODO: colocar aqui o logo */}
-          </h2>
+          <div className='p-2'>
+            <img src="./barber-hub-logo.png" className='w-40'/>
+          </div>
 
           <Dialog
             open={isUpdateBarbershopDialogOpen}

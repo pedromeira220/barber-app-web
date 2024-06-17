@@ -1,7 +1,8 @@
+import { env } from "@/env/env";
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:3333"
+  baseURL: env.VITE_API_URL
 })
 
 api.interceptors.request.use(
