@@ -7,6 +7,7 @@ import { Clientes } from "./clientes"
 import { Servicos } from "./servicos"
 import AgendaCliente from "./agenda-cliente"
 import { PrivateRoute } from "@/utils/private-route"
+import { Dashboard } from "./dashboard"
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
   {
     path: "/agenda",
     element: <PrivateRoute><Agenda /></PrivateRoute>
+  },
+  {
+    path: "/dashboard",
+    element: <PrivateRoute><Dashboard /></PrivateRoute>
   },
   {
     path: "/profissionais",

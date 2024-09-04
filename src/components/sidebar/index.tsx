@@ -13,7 +13,7 @@ export function Sidebar({ className }: SidebarProps) {
 
   const navigate = useNavigate()
 
-  const {authenticatedBarbershop, logout} = useAuth()
+  const { authenticatedBarbershop, logout } = useAuth()
 
   // const { data: profile, isLoading: isLoadingProfile } = useQuery({
   //   queryKey: ['barbershop'],
@@ -28,10 +28,10 @@ export function Sidebar({ className }: SidebarProps) {
   }
 
   const handleLogout = async () => {
-    if(!confirm("Tem certeza que deseja deslogar")) {
+    if (!confirm("Tem certeza que deseja deslogar")) {
       return
     }
-    
+
     try {
       await logout()
       navigate("/login")
@@ -39,12 +39,12 @@ export function Sidebar({ className }: SidebarProps) {
     } catch (error) {
       console.error("Eror ao deslogar");
       console.error(error);
-      
+
     }
 
   }
 
-  if(!authenticatedBarbershop) {
+  if (!authenticatedBarbershop) {
     return null
   }
 
@@ -53,7 +53,7 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="py-4 px-3 flex flex-col h-full">
         <div className="py-2 flex flex-col gap-4 h-full">
           <div className='p-2'>
-            <img src="./barber-hub-logo.png" className='w-40'/>
+            <img src="./barber-hub-logo.png" className='w-40' />
           </div>
 
           <Dialog
@@ -62,7 +62,7 @@ export function Sidebar({ className }: SidebarProps) {
           >
             <DialogTrigger asChild>
               <button className='flex flex-row items-center gap-2 hover:bg-slate-100 rounded-md py-2 hover:cursor-pointer justify-start'>
-                <img src="logo-barbearia.jpeg" className='w-10 h-10 rounded-full'/>
+                <img src="logo-barbearia.jpeg" className='w-10 h-10 rounded-full' />
 
                 <div className='flex flex-col items-start'>
                   <p className='font-bold text-start'>{authenticatedBarbershop?.name}</p>
@@ -78,6 +78,14 @@ export function Sidebar({ className }: SidebarProps) {
           </Dialog>
 
           <div className="flex flex-col gap-1">
+            <Button variant="ghost" className="w-full justify-start"
+              onClick={() => {
+                handleChangeRoute("/dashboard")
+              }}
+            >
+              <Calendar size={24} className="mr-2 h-4 w-4" />
+              Dashboard
+            </Button>
             <Button variant="ghost" className="w-full justify-start"
               onClick={() => {
                 handleChangeRoute("/agenda")
