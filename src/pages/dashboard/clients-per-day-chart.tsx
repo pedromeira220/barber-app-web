@@ -1,6 +1,6 @@
 import colors from 'tailwindcss/colors';
 
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 
 import {
   Card,
@@ -31,7 +31,7 @@ const chartConfig = {
   },
   clients: {
     label: "Clientes",
-    color: colors.blue[400],
+    color: colors.amber[400],
   },
 } satisfies ChartConfig
 
@@ -54,16 +54,6 @@ export function ClientsPerDayChart() {
           >
             <CartesianGrid vertical={false} />
 
-            <YAxis
-              dataKey="clients"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={32}
-              tickFormatter={(value) => {
-                return value
-              }}
-            />
-
             <XAxis
               dataKey="date"
               tickLine={false}
@@ -72,7 +62,7 @@ export function ClientsPerDayChart() {
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value)
-                return date.toLocaleDateString("en-US", {
+                return date.toLocaleDateString("pt-BR", {
                   weekday: "short"
                 })
               }}
@@ -83,7 +73,7 @@ export function ClientsPerDayChart() {
                   className="w-[150px]"
                   nameKey="views"
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value).toLocaleDateString("pt-BR", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",

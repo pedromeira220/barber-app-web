@@ -4,6 +4,8 @@ import { DatePicker } from "../agenda/date-picker"
 import { MetricHeading } from "./metric-heading"
 import { IncomePerDayChart } from "./income-per-day-chart"
 import { ClientsPerDayChart } from "./clients-per-day-chart"
+import { IncomePerProfessionalChart } from "./income-per-professional-chart"
+import { IncomePerServiceChart } from "./income-per-service-chart"
 
 export function Dashboard() {
 
@@ -20,11 +22,10 @@ export function Dashboard() {
           <div className="flex flex-row gap-2">
             <DatePicker />
           </div>
-
         </div>
 
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-row gap-8">
+        <div className="flex flex-col gap-12">
+          <div className="flex flex-row gap-10">
             <div className="flex flex-col gap-5">
               <MetricHeading
                 change={0.092}
@@ -48,8 +49,8 @@ export function Dashboard() {
 
           <div className="flex flex-row gap-6">
             <ClientsPerDayChart />
-            <ClientsPerDayChart />
-            <ClientsPerDayChart />
+            <IncomePerProfessionalChart />
+            <IncomePerServiceChart />
           </div>
         </div>
 

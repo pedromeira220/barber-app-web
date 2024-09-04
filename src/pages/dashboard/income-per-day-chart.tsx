@@ -53,7 +53,7 @@ const chartConfig = {
   },
   income: {
     label: "Income",
-    color: colors.amber[600],
+    color: colors.amber[500],
   },
 } satisfies ChartConfig
 
