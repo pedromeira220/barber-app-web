@@ -28,17 +28,17 @@ export function Dashboard() {
           <div className="flex flex-row gap-10">
             <div className="flex flex-col gap-5">
               <MetricHeading
-                change={0.092}
+                diffFromPreviousPeriod={-0.092}
                 text="Receita total"
                 value={"R$9.672,00"}
               />
               <MetricHeading
-                change={0.066}
+                diffFromPreviousPeriod={0.066}
                 text="Ticket médio geral"
                 value={"R$40,30"}
               />
               <MetricHeading
-                change={0.081}
+                diffFromPreviousPeriod={0.081}
                 text="Serviços efetuados"
                 value={"240"}
               />
