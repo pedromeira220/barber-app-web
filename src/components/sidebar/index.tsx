@@ -66,7 +66,6 @@ export function Sidebar({ className }: SidebarProps) {
 
                 <div className='flex flex-col items-start'>
                   <p className='font-bold text-start'>{authenticatedBarbershop?.name}</p>
-                  <p className='text-primary'>Nível 7</p>
                 </div>
               </button>
             </DialogTrigger>
