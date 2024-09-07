@@ -9,7 +9,7 @@ export const MetricsSection: React.FC = () => {
   const month = 9
 
   const {data: metrics, isLoading} = useQuery({
-    queryKey: ["metrics", month],
+    queryKey: ["metrics", month, year],
     queryFn: async () => {
 
       const response = await getMetrics({
