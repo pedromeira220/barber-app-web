@@ -15,6 +15,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import colors from "tailwindcss/colors"
+import React from "react"
 
 export const description = "A simple pie chart"
 
@@ -52,7 +53,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function IncomePerProfessionalChart() {
+interface IncomePerProfessionalChartProps {
+  year: number | null
+  month: number | null
+}
+
+export const IncomePerProfessionalChart: React.FC<IncomePerProfessionalChartProps> = () => {
+
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">

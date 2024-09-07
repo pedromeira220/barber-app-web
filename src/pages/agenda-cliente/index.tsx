@@ -153,8 +153,7 @@ const AgendaCliente: React.FC = () => {
   // Função para lidar com o clique no botão "Agendar"
   const handleAgendarClick = () => {
     if (profissionalSelecionado) {
-      // Lógica para agendar aqui, como enviar dados para o servidor, etc.
-      console.log(`Agendar com ${profissionalSelecionado}`);
+      // Lógica para agendar aqui, como enviar dados para o servidor, etc
     } else {
       alert('Por favor, selecione um profissional.');
     }

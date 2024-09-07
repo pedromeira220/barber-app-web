@@ -57,8 +57,8 @@ export function Dashboard() {
           </div>
 
           <div className="flex flex-row gap-6">
-            <ClientsPerDayChart />
-            <IncomePerProfessionalChart />
+            <ClientsPerDayChart month={month} year={year}/>
+            <IncomePerProfessionalChart month={month} year={year}/>
             <IncomePerServiceChart />
           </div>
         </div>

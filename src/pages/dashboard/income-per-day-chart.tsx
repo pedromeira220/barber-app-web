@@ -36,13 +36,7 @@ export const IncomePerDayChart: React.FC<IncomePerDayChartProps> = ({month,year}
 
   const { data: incomePerDay, isLoading } = useQuery({
     queryKey: ["metrics/income-per-day", month, year],
-    queryFn: async () => {
-
-      console.log({
-        month,
-        year
-      });
-      
+    queryFn: async () => {      
 
       if(!month || !year) {
         return []
@@ -58,15 +52,11 @@ export const IncomePerDayChart: React.FC<IncomePerDayChartProps> = ({month,year}
       return response.data.incomePerDay
     },
   })
-
-  console.log(incomePerDay);
   
 
   if (isLoading) {
     return <p>loading</p>
   }
-
-  console.log(incomePerDay);
 
 
   return (

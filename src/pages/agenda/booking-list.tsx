@@ -43,8 +43,6 @@ export const BookingList: React.FC = () => {
     queryKey: ["bookings", professionalIdFilter, dateFilter, serviceIdFilter],
     enabled: !!dateFilter,
     queryFn: async () => {
-      console.log("> executou");
-
 
       const response = await fetchBookingsFromAuthBarbershop({
         date: dateFilter,
