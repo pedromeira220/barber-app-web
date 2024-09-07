@@ -93,6 +93,10 @@ export const BookingList: React.FC = () => {
     return bookingsSeparate.filter(bp => bp.bookings.length > 0);
   }, [bookings]);
 
+
+  console.log(bookings);
+  
+
   return (
     <>
 

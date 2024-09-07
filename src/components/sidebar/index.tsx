@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { ComponentProps, useState } from 'react'
 import { Button } from '../ui/button'
-import { Calendar, Contact, LayoutDashboard, LogOut, Scissors, Users } from 'lucide-react'
+import { Calendar, Contact, DollarSign, LayoutDashboard, LogOut, Scissors, Users } from 'lucide-react'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import { DialogUpdateBarbershop } from './dialog-update-barbershop'
 import { useAuth } from '@/hooks/use-auth'
@@ -93,6 +93,14 @@ export function Sidebar({ className }: SidebarProps) {
             >
               <Calendar size={24} className="mr-2 h-4 w-4" />
               Agenda
+            </Button>
+            <Button variant="ghost" className="w-full justify-start"
+              onClick={() => {
+                handleChangeRoute("/pagamentos")
+              }}
+            >
+              <DollarSign size={24} className="mr-2 h-4 w-4" />
+              Pagamentos
             </Button>
             <Button variant="ghost" className="w-full justify-start"
               onClick={() => {

@@ -71,7 +71,8 @@ export const DialogRegisterBooking: React.FC<DialogRegisterBookingProps> = ({set
         clientPhone: data.clientPhone,
         date: bookingDate,
         professionalId: data.professionalId,
-        serviceId: data.serviceId
+        serviceId: data.serviceId,
+        status: "PENDING"
       })
 
       queryClient.invalidateQueries({

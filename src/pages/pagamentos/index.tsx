@@ -83,10 +83,10 @@ export function Pagamentos() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">
-              Visão dos clientes da barbearia
+              Pagamentos
             </h2>
             <p className="text-muted-foreground">
-              Veja aqui todos os clientes da sua barbearia
+              Veja aqui todos os pagamentos
             </p>
           </div>
 

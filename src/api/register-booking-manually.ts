@@ -7,6 +7,7 @@ export interface RegisterBookingManuallyQuery {
   clientPhone: string,
   observations?: string,
   professionalId: string
+  status: "PENDING" | "COMPLETED" | "CANCELED"
 }
 
 export async function registerBookingManually({
@@ -15,7 +16,8 @@ export async function registerBookingManually({
   professionalId,
   serviceId,
   clientName,
-  clientPhone
+  clientPhone,
+  status
 }: RegisterBookingManuallyQuery) {
   return api.post(`/bookings`, {
     clientName,
@@ -23,6 +25,7 @@ export async function registerBookingManually({
     date,
     observations,
     professionalId,
-    serviceId
+    serviceId,
+    status
   })
 }
