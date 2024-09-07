@@ -3,7 +3,7 @@ import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTit
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
-import { SelectComponent } from "./select-component";
+import { SelectComponent } from "../../../components/select-component";
 import { DatePicker } from "./date-picker";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";

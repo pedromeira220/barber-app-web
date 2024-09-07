@@ -7,7 +7,7 @@ import { Booking } from "@/interfaces/booking";
 import { fetchProfessionalsFromBarbershop } from "@/api/fetch-professionals-from-barbershop";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchServicesFromBarbershop } from "@/api/fetch-services-from-barbershop";
-import { SelectComponent } from "./dialog-register-booking/select-component";
+import { SelectComponent } from "../../components/select-component";
 import { DatePicker } from "./dialog-register-booking/date-picker";
 
 const PERIODS = [

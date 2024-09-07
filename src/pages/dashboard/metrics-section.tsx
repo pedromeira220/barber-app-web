@@ -3,14 +3,20 @@ import { MetricHeading } from "./metric-heading";
 import { useQuery } from "@tanstack/react-query";
 import { getMetrics } from "@/api/get-metrics";
 
-export const MetricsSection: React.FC = () => {
+interface MetricsSectionProps {
+  year: number | null
+  month: number | null
+}
 
-  const year = 2024
-  const month = 9
+export const MetricsSection: React.FC<MetricsSectionProps> = ({month,year}) => {
 
   const {data: metrics, isLoading} = useQuery({
     queryKey: ["metrics", month, year],
     queryFn: async () => {
+
+      if(!month || !year) {
+        return
+      }
 
       const response = await getMetrics({
         query: {
@@ -21,6 +27,7 @@ export const MetricsSection: React.FC = () => {
 
       return response.data
     },
+    enabled: !!month && !!year,
   })  
 
   const formatToCurrency = (value: number) => {
@@ -42,7 +49,7 @@ export const MetricsSection: React.FC = () => {
       <MetricHeading
         diffFromPreviousPeriod={metrics?.completedBookings.diffFromLastMoth}
         text="Agendamentos completos"
-        value={isLoading ? "..." : String(metrics?.completedBookings.completedBookingsCount)}
+        value={isLoading || !metrics?.completedBookings.completedBookingsCount ? "..." : String(metrics?.completedBookings.completedBookingsCount)}
       />
     </div>
   )

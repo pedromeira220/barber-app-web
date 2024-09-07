@@ -14,6 +14,7 @@ import {
 import colors from 'tailwindcss/colors';
 import { useQuery } from "@tanstack/react-query";
 import { getIncomePerDay } from "@/api/get-income-per-day"
+import React from "react";
 
 
 const chartConfig = {
@@ -26,14 +27,27 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function IncomePerDayChart() {
-  const year = 2024
-  const month = 9
+interface IncomePerDayChartProps {
+  year: number | null
+  month: number | null
+}
+
+export const IncomePerDayChart: React.FC<IncomePerDayChartProps> = ({month,year}) => {
 
   const { data: incomePerDay, isLoading } = useQuery({
     queryKey: ["metrics/income-per-day", month, year],
     queryFn: async () => {
 
+      console.log({
+        month,
+        year
+      });
+      
+
+      if(!month || !year) {
+        return []
+      }
+      
       const response = await getIncomePerDay({
         query: {
           month,
@@ -44,6 +58,9 @@ export function IncomePerDayChart() {
       return response.data.incomePerDay
     },
   })
+
+  console.log(incomePerDay);
+  
 
   if (isLoading) {
     return <p>loading</p>

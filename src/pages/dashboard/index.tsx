@@ -1,13 +1,31 @@
 
 import { Sidebar } from "@/components/sidebar"
-import { DatePicker } from "../agenda/date-picker"
 import { IncomePerDayChart } from "./income-per-day-chart"
 import { ClientsPerDayChart } from "./clients-per-day-chart"
 import { IncomePerProfessionalChart } from "./income-per-professional-chart"
 import { IncomePerServiceChart } from "./income-per-service-chart"
 import { MetricsSection } from "./metrics-section"
+import { MonthPicker } from "./month-picker"
+import { useEffect, useState } from "react"
 
 export function Dashboard() {
+
+  const [month, setMonth] = useState<null | number>(null)
+  const [year, setYear] = useState<null | number>(null)
+
+  useEffect(() => {
+    const currentDate = new Date();
+    
+    // Obter o mês atual (1 para Janeiro, 12 para Dezembro)
+    const currentMonth = currentDate.getMonth() + 1; // getMonth() retorna 0 para Janeiro, 11 para Dezembro, por isso somamos 1
+
+    // Obter o ano atual
+    const currentYear = currentDate.getFullYear();
+
+    // Setar os estados de mês e ano
+    setMonth(currentMonth);
+    setYear(currentYear);
+  }, []);
 
   return (
     <div className="grid min-h-screen grid-cols-5">
@@ -24,17 +42,18 @@ export function Dashboard() {
             </p>
           </div>
 
+            <MonthPicker 
+              onSelectMonth={setMonth}
+              onSelectYear={setYear}
+            />
 
-          <div className="flex flex-row gap-2">
-            <DatePicker />
-          </div>
         </div>
 
         <div className="flex flex-col gap-12">
           <div className="flex flex-row gap-10">
-            <MetricsSection />
+            <MetricsSection month={month} year={year}/>
 
-            <IncomePerDayChart />
+            <IncomePerDayChart month={month} year={year}/>
           </div>
 
           <div className="flex flex-row gap-6">
