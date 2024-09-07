@@ -8,6 +8,7 @@ export interface Booking {
   serviceId: string,
   professionalId: string,
   observations: string | null,
+  status: "COMPLETED" | "PENDING" | "CANCELED"
   client: {
     id: string,
     name: string,

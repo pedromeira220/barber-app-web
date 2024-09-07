@@ -9,6 +9,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { fetchServicesFromBarbershop } from "@/api/fetch-services-from-barbershop";
 import { SelectComponent } from "../../components/select-component";
 import { DatePicker } from "./dialog-register-booking/date-picker";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { DialogCompleteBooking } from "./dialog-complete-booking";
 
 const PERIODS = [
   {
@@ -35,6 +38,7 @@ export const BookingList: React.FC = () => {
 
   const { authenticatedBarbershop } = useAuth()
 
+  const [dialogCompleteBookingIsOpen, setDialogCompleteBookingIsOpen] = useState(false)
   const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined)
   const [professionalIdFilter, setProfessionalIdFilter] = useState<string | undefined>(undefined)
   const [serviceIdFilter, setServiceIdFilter] = useState<string | undefined>(undefined)
@@ -93,7 +97,7 @@ export const BookingList: React.FC = () => {
 
 
   console.log(bookings);
-  
+
 
   return (
     <>
@@ -160,9 +164,44 @@ export const BookingList: React.FC = () => {
                 {
                   period.bookings.map(booking => {
                     return (
-                      <div className="py-2 flex items-center gap-3" key={booking.id}>
-                        <span className="font-bold">{format(new Date(booking.startDate), "HH:mm")}-{format(new Date(booking.endDate), "HH:mm")}</span>
-                        <span>{booking.client.name} - {booking.service.name} - {booking.professional.name}</span>
+                      <div key={booking.id} className="flex items-center justify-between">
+                        <div className="py-2 flex items-center gap-3">
+                          <span className="font-bold">{format(new Date(booking.startDate), "HH:mm")}-{format(new Date(booking.endDate), "HH:mm")}</span>
+                          <span>{booking.client.name} - {booking.service.name} - {booking.professional.name}</span>
+                        </div>
+                        {
+                          booking.status == "PENDING" ? (
+                            <Dialog
+                              open={dialogCompleteBookingIsOpen}
+                              onOpenChange={setDialogCompleteBookingIsOpen}
+                            >
+
+                              <DialogTrigger asChild>
+                                <Button variant="outline">Completar agendamento</Button>
+                              </DialogTrigger>
+
+
+
+                              <DialogCompleteBooking
+                                setOpen={setDialogCompleteBookingIsOpen}
+                                bookingId={booking.id}
+                              />
+                            </Dialog>
+                          ) : null
+                        } 
+
+                        {
+                          booking.status == "COMPLETED" ? (
+                            <span className="text-green-500">Completo</span>
+                          ) : null
+                        }
+
+{
+                          booking.status == "CANCELED" ? (
+                            <span className="text-red-500">Cancelado</span>
+                          ) : null
+                        }
+
                       </div>
                     )
                   })

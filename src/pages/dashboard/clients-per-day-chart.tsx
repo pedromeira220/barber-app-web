@@ -129,9 +129,7 @@ export const ClientsPerDayChart: React.FC<ClientsPerDayChartProps> = ({month,yea
                   nameKey="views"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("pt-BR", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
+                      weekday: "long"
                     })
                   }}
                 />
