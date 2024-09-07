@@ -11,22 +11,33 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-
+import { DatePickerFilter } from "@/components/date-picker-filter";  // Importe o DatePickerFilter
 
 export function Pagamentos() {
   const [clientes, setClientes] = useState([
-    { id: 1, nome: 'Cliente João', telefone: '11 99999-9999' },
-    { id: 2, nome: 'Cliente Maria', telefone: '11 88888-8888' },
-    
+    { id: 1, nome: 'Cliente João', telefone: '11 99999-9999', data: '2023-08-21', valor: 'R$ 150,00', servico: 'Consultoria' },
+    { id: 2, nome: 'Cliente Maria', telefone: '11 88888-8888', data: '2023-08-22', valor: 'R$ 200,00', servico: 'Desenvolvimento' },
   ]);
-  const [form, setForm] = useState({ nome: '', telefone: '' });
+  
+  const [form, setForm] = useState({ nome: '', telefone: '', data: '', valor: '', servico: '' });
   const [showForm, setShowForm] = useState(false);
-  const [selectedClienteId, setSelectedClienteId] = useState(null);
-  const [searchText, setSearchText] = useState("")
+  const [selectedClienteId, setSelectedClienteId] = useState<number | null>(null);
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setForm(prevForm => ({ ...prevForm, [name]: value }));
+  };
+
+  const handleDateChange = (date: Date | undefined) => {
+    if (date) {
+      setForm(prevForm => ({
+        ...prevForm,
+        data: date.toISOString().split("T")[0],  // Converte a data para o formato 'YYYY-MM-DD'
+      }));
+    }
   };
 
   const handleAdd = () => {
@@ -35,7 +46,7 @@ export function Pagamentos() {
       ...prev,
       { ...form, id: newId },
     ]);
-    setForm({ nome: '', telefone: '' });
+    setForm({ nome: '', telefone: '', data: '', valor: '', servico: '' });
     setShowForm(false);
   };
 
@@ -45,21 +56,24 @@ export function Pagamentos() {
         cliente.id === selectedClienteId ? { ...form, id: selectedClienteId } : cliente
       )
     );
-    setForm({ nome: '', telefone: '' });
+    setForm({ nome: '', telefone: '', data: '', valor: '', servico: '' });
     setShowForm(false);
     setSelectedClienteId(null);
   };
 
-  const handleEdit = (id: any) => {
+  const handleEdit = (id: number) => {
     const cliente = clientes.find(cli => cli.id === id);
 
-    if(!cliente) {
-      return
+    if (!cliente) {
+      return;
     }
 
     setForm({
       nome: cliente.nome,
-      telefone: cliente.telefone
+      telefone: cliente.telefone,
+      data: cliente.data,
+      valor: cliente.valor,
+      servico: cliente.servico,
     });
     setShowForm(true);
     setSelectedClienteId(id);
@@ -69,11 +83,21 @@ export function Pagamentos() {
     setClientes(prev => prev.filter(cli => cli.id !== id));
   };
 
-  const clientesFiltrados = searchText.length > 0 ? 
-  clientes.filter(cliente => cliente.nome.toLowerCase().includes(searchText.toLowerCase()))
-  :[]
+  const handleNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
 
-  const listaDeClientesParaExibir = searchText.length > 0 ? clientesFiltrados : clientes
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const clientesFiltrados = searchText.length > 0 ? 
+    clientes.filter(cliente => cliente.nome.toLowerCase().includes(searchText.toLowerCase()))
+    : [];
+
+  const listaDeClientesParaExibir = searchText.length > 0 ? clientesFiltrados : clientes;
+  const paginatedClientes = listaDeClientesParaExibir.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(listaDeClientesParaExibir.length / itemsPerPage);
 
   return (
     <div className="grid min-h-screen grid-cols-5">
@@ -83,22 +107,22 @@ export function Pagamentos() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">
-              Pagamentos
+              Histórico de pagamentos
             </h2>
             <p className="text-muted-foreground">
-              Veja aqui todos os pagamentos
+              Veja aqui todos os pagamentos realizados
             </p>
           </div>
 
           <div className="flex flex-row gap-2">
-            <Button onClick={() => setShowForm(true)}>Cadastrar cliente</Button>
+            <Button onClick={() => setShowForm(true)}>Adicionar pagamento anual</Button>
           </div>
         </div>
 
         <div>
-          <Input type="text" placeholder="Procure um cliente..." 
+          <Input type="text" placeholder="Buscar pagamento de cliente..." 
             onChange={(event) => {
-              setSearchText(event.target.value)
+              setSearchText(event.target.value);
             }}
           />
         </div>
@@ -107,16 +131,22 @@ export function Pagamentos() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[200px]">Nome</TableHead>
+                <TableHead className="w-[150px]">Data</TableHead>
+                <TableHead>Cliente</TableHead>
                 <TableHead>Telefone</TableHead>
+                <TableHead>Valor</TableHead>
+                <TableHead>Serviço</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {listaDeClientesParaExibir.map(cliente => (
+              {paginatedClientes.map(cliente => (
                 <TableRow key={cliente.id}>
+                  <TableCell>{cliente.data}</TableCell> {/* Certifique-se de que a data é exibida */}
                   <TableCell>{cliente.nome}</TableCell>
                   <TableCell>{cliente.telefone}</TableCell>
+                  <TableCell>{cliente.valor}</TableCell>
+                  <TableCell>{cliente.servico}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
                       <Button variant="outline" onClick={() => handleEdit(cliente.id)}>Editar</Button>
@@ -129,21 +159,66 @@ export function Pagamentos() {
           </Table>
         </div>
 
-        {showForm && (
-          <div className="rounded-md border p-4">
-            <form className="flex flex-col gap-2">
-              <input type="text" name="nome" placeholder="Nome do cliente" value={form.nome} onChange={handleChange} className="p-2 border rounded" />
-              <input type="text" name="telefone" placeholder="Telefone" value={form.telefone} onChange={handleChange} className="p-2 border rounded" />
-              <div className="flex justify-end">
-                {selectedClienteId ? (
-                  <Button onClick={handleUpdate} type="button">Atualizar</Button>
-                ) : (
-                  <Button onClick={handleAdd} type="button">Adicionar</Button>
-                )}
-              </div>
-            </form>
+        {listaDeClientesParaExibir.length > itemsPerPage && (
+          <div className="flex justify-between items-center mt-4">
+            <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
+              ← Previous
+            </Button>
+            <span>{currentPage} / {totalPages}</span>
+            <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
+              Next →
+            </Button>
           </div>
         )}
+
+{showForm && (
+  <div className="rounded-md border p-4">
+    <form className="flex flex-col gap-2">
+      <input 
+        type="text" 
+        name="nome" 
+        placeholder="Nome do cliente" 
+        value={form.nome} 
+        onChange={handleChange} 
+        className="p-2 border rounded" 
+      />
+      <input 
+        type="text" 
+        name="telefone" 
+        placeholder="Telefone" 
+        value={form.telefone} 
+        onChange={handleChange} 
+        className="p-2 border rounded" 
+      />
+      {/* Insira o componente DatePickerFilter aqui */}
+      <DatePickerFilter onSelectDate={handleDateChange} /> 
+      <input 
+        type="text" 
+        name="valor" 
+        placeholder="Valor" 
+        value={form.valor} 
+        onChange={handleChange} 
+        className="p-2 border rounded" 
+      />
+      <input 
+        type="text" 
+        name="servico" 
+        placeholder="Serviço" 
+        value={form.servico} 
+        onChange={handleChange} 
+        className="p-2 border rounded" 
+      />
+      <div className="flex justify-end">
+        {selectedClienteId ? (
+          <Button onClick={handleUpdate} type="button">Atualizar</Button>
+        ) : (
+          <Button onClick={handleAdd} type="button">Adicionar</Button>
+        )}
+      </div>
+    </form>
+  </div>
+)}
+
       </div>
     </div>
   );
