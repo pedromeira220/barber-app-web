@@ -1,3 +1,4 @@
+import { getServices } from "@/api/get-services";
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import {
@@ -8,6 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { formatToCurrency } from "@/utils/format-to-currency";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export function Servicos() {
@@ -61,6 +64,16 @@ export function Servicos() {
     setServicos(prev => prev.filter(serv => serv.id !== id));
   };
 
+  const {data: services} = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+
+      const response = await getServices()
+
+      return response.data.services
+    },
+  })
+
   return (
     <div className="grid min-h-screen grid-cols-5">
       <Sidebar />
@@ -88,21 +101,23 @@ export function Servicos() {
                 <TableHead className="w-[200px]">Nome do serviço</TableHead>
                 <TableHead>Preço</TableHead>
                 <TableHead>Duração</TableHead>
+                <TableHead className="w-[120px]">% Comissão</TableHead>
                 <TableHead>Descrição</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {servicos.map(servico => (
-                <TableRow key={servico.id}>
-                  <TableCell>{servico.nome}</TableCell>
-                  <TableCell>{servico.preco}</TableCell>
-                  <TableCell>{servico.duracao}</TableCell>
-                  <TableCell>{servico.descricao}</TableCell>
+              {services?.map(service => (
+                <TableRow key={service.id}>
+                  <TableCell>{service.name}</TableCell>
+                  <TableCell>{formatToCurrency(service.priceInCents / 100)}</TableCell>
+                  <TableCell>{service.durationInMinutes}min</TableCell>
+                  <TableCell>{service.commissionPercentage * 100}%</TableCell>
+                  <TableCell>{service.description}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
-                      <Button variant="outline" onClick={() => handleEdit(servico.id)}>Editar</Button>
-                      <Button variant="secondary" onClick={() => handleDelete(servico.id)}>Deletar</Button>
+                      <Button variant="outline" onClick={() => handleEdit(service.id)}>Editar</Button>
+                      <Button variant="secondary" onClick={() => handleDelete(service.id)}>Deletar</Button>
                     </div>
                   </TableCell>
                 </TableRow>
