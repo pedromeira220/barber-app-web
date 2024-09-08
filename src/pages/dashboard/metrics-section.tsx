@@ -27,12 +27,15 @@ export const MetricsSection: React.FC<MetricsSectionProps> = ({month,year}) => {
 
       return response.data
     },
-    enabled: !!month && !!year,
   })  
 
   const formatToCurrency = (value: number) => {
     return  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
+
+  console.log("> metrics", metrics);
+  
+
 
   return (
     <div className="flex flex-col gap-5">

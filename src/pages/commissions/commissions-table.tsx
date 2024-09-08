@@ -7,13 +7,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
+import { getCommissions } from "@/api/get-commissions";
+import { format } from "date-fns";
 
-export const CommissionsTable: React.FC = () => {
+interface CommissionsTableProps {
+  year: number | null
+  month: number | null
+}
+
+export const CommissionsTable: React.FC<CommissionsTableProps> = ({ month, year }) => {
+
+  const { data: commissions } = useQuery({
+    queryKey: ["commissions", month, year],
+    queryFn: async () => {
+
+      if (!month || !year) {
+        return
+      }
+
+      const response = await getCommissions({
+        query: {
+          month,
+          year
+        }
+      })
+
+      return response.data.commissions
+    },
+    refetchOnWindowFocus: "always"
+  })
+
+
   return (
     <div className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Data</TableHead>
             <TableHead>Profissional</TableHead>
             <TableHead>Serviço</TableHead>
             <TableHead>Valor</TableHead>
@@ -22,15 +53,20 @@ export const CommissionsTable: React.FC = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell>José</TableCell>
-            <TableCell>Corte e barba</TableCell>
-            <TableCell>{(3000 / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
-            <TableCell>{(0.5 * 100)}%</TableCell>
-            <TableCell>{(1500 / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
-          </TableRow>
-
-
+          {
+            commissions?.map(commission => {
+              return (
+                <TableRow key={commission.id}>
+                  <TableCell>{format(new Date(commission.date), "dd-MM-yyyy")}</TableCell>
+                  <TableCell>{commission.professionalName}</TableCell>
+                  <TableCell>{commission.serviceName}</TableCell>
+                  <TableCell>{(commission.valueInCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
+                  <TableCell>{(commission.commissionPercentage * 100)}%</TableCell>
+                  <TableCell>{(commission.commissionValueInCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
+                </TableRow>
+              )
+            })
+          }
         </TableBody>
       </Table>
     </div>
