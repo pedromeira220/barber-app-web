@@ -3,7 +3,6 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -14,13 +13,16 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import colors from "tailwindcss/colors"
+import { useQuery } from "@tanstack/react-query"
+import React, { useMemo } from "react"
+import { getBarbershopIncomePerProfessionalMetrics } from "@/api/get-barbershop-income-per-professional"
 
-const chartData = [
-  { professional: "João", income: 186 },
-  { professional: "José", income: 305 },
-  { professional: "Felipe", income: 237 },
-  { professional: "Fulano", income: 73 },
-]
+// const chartData = [
+//   { professional: "João", income: 186 },
+//   { professional: "José", income: 305 },
+//   { professional: "Felipe", income: 237 },
+//   { professional: "Fulano", income: 73 },
+// ]
 
 const chartConfig = {
   income: {
@@ -29,12 +31,52 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function BarbershopIncomePerProfessionalChart() {
+interface BarbershopIncomePerProfessionalChartProps {
+  year: number | null
+  month: number | null
+}
+
+export const BarbershopIncomePerProfessionalChart: React.FC<BarbershopIncomePerProfessionalChartProps> = ({month,year}) => {
+
+  const {data: professionals} = useQuery({
+    queryKey: ["metrics/barbershop-income-per-professional", month, year],
+    queryFn: async () => {      
+
+      if(!month || !year) {
+        return []
+      }
+      
+      const response = await getBarbershopIncomePerProfessionalMetrics({
+        query: {
+          month,
+          year
+        }
+      })
+
+      return response.data.professionals
+    },
+  })
+
+  const chartData = useMemo(() => {
+
+    if(!professionals) {
+      return []
+    }
+
+    return professionals.map(professional => {
+      return {
+        professional: professional.professionalName,
+        income: professional.totalGrossRevenueInCents / 100
+      }
+    })
+  }, [professionals])
+  
+  chartData
+
   return (
     <Card className="flex flex-1 flex-col">
       <CardHeader>
         <CardTitle>Receita da barbearia por professional</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

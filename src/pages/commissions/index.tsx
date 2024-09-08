@@ -48,16 +48,22 @@ export const Commissions: React.FC = () => {
         </div>
 
         <div className="flex flex-col gap-12">
-          <IncomeMetricsSection 
+          <IncomeMetricsSection
             month={month}
             year={year}
           />
 
           <div className="flex gap-8">
-            <BarbershopIncomePerProfessionalChart />
-            <ProfessionalIncomeChart />
+            <BarbershopIncomePerProfessionalChart
+              month={month}
+              year={year}
+            />
+            <ProfessionalIncomeChart
+              month={month}
+              year={year}
+            />
           </div>
-          <CommissionsTable 
+          <CommissionsTable
             month={month}
             year={year}
           />
