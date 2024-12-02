@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
     element: <PrivateRoute><Servicos /></PrivateRoute>
   },
   {
-    path: "/agenda-cliente",
+    path: "/agenda-cliente/:barbershopId",
     element: <AgendaCliente />
   }
 

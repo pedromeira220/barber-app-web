@@ -11,7 +11,10 @@ import { BookingList } from "./booking-list"
 export function Agenda() {
   const {authenticatedBarbershop} = useAuth()
 
+
   const [dialogRegisterBookingIsOpen, setDialogRegisterBookingIsOpen] = useState(false)
+
+  const clientBookingUrl = `${window.location.protocol}//${window.location.host}/agenda-cliente/${authenticatedBarbershop?.id}`; 
 
   return (
     <div className="grid min-h-screen grid-cols-5">
@@ -23,8 +26,8 @@ export function Agenda() {
             <h2 className="text-2xl font-bold tracking-tight">
               Agenda da barbearia: {authenticatedBarbershop?.name}
             </h2>
-            <p className="text-muted-foreground">
-              Consulte os agendamentos do dia
+            <p>
+              <a className="font-semibold text-primary" href={clientBookingUrl} target="_blank" rel="noopener noreferrer">{clientBookingUrl}</a>
             </p>
           </div>
 

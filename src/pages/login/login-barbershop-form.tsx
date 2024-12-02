@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, {useState} from "react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -24,6 +24,8 @@ type loginBarbershopFormSchemaInputs = z.infer<typeof loginBarbershopFormSchema>
 
 export function LoginBarbershopForm({ className, ...props }: BarbershopRegisterFormProps) {
 
+  const [isLogging, setIsLogging] = useState(false)
+
   const navigate = useNavigate()
   const { login } = useAuth()
 
@@ -32,7 +34,7 @@ export function LoginBarbershopForm({ className, ...props }: BarbershopRegisterF
   })
 
   const handleRegisterBarbershop = async (data: loginBarbershopFormSchemaInputs) => {
-    
+    setIsLogging(true)
     try {
       await login({
         email: data.email,
@@ -47,6 +49,8 @@ export function LoginBarbershopForm({ className, ...props }: BarbershopRegisterF
       }
 
       toast.error("Erro ao tentar fazer login")
+    } finally {
+      setIsLogging(false)
     }
 
   }
@@ -83,8 +87,8 @@ export function LoginBarbershopForm({ className, ...props }: BarbershopRegisterF
             />
             
           </div>
-          <Button disabled={isLoading} className="mt-3">
-            {isLoading && (
+          <Button disabled={isLogging} className="mt-3">
+            {isLogging && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
               Entrar
