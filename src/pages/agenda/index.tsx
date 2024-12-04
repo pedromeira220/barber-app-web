@@ -32,7 +32,6 @@ export function Agenda() {
           </div>
 
           <div className="flex flex-row gap-2">
-            <Button variant="outline">Bloquear horário</Button>
             <Dialog
               open={dialogRegisterBookingIsOpen}
               onOpenChange={setDialogRegisterBookingIsOpen}
@@ -45,8 +44,6 @@ export function Agenda() {
                 setOpen={setDialogRegisterBookingIsOpen}
               />
             </Dialog>
-            
-            
           </div>
             
         </div>
